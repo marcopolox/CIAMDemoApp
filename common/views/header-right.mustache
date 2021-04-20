@@ -1,0 +1,97 @@
+<div id="userloggedin" style="display: none">{{{isLoggedIn}}}</div>
+
+<div class="app-header-right" style="display:none">
+    <div class="header-btn-lg pr-0">
+        <div class="widget-content p-0">
+            <div class="widget-content-wrapper">
+                <div class="widget-content-left">
+                    <div class="btn-group">
+                        <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
+                            <img width="42" class="rounded-circle" src="assets/images/avatars/user.png" alt="">
+                            <i class="fa fa-angle-down ml-2 opacity-8"></i>
+                        </a>
+                        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+                            <button type="button" tabindex="0" class="dropdown-item" id="userinfo">User Account</button>
+                            <div tabindex="-1" class="dropdown-divider"></div>
+                            <button type="button" tabindex="0" id="logout" class="dropdown-item text-danger">LOG OUT</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-content-left  ml-3 header-user-info">
+                    <div class="widget-heading" id="user_name">
+                        {{#isLoggedIn}}{{userinfo.name}}{{/isLoggedIn}}
+                    </div>
+                    <div class="widget-subheading" id="user_title">
+                        {{#isLoggedIn}}{{userinfo.title}}{{/isLoggedIn}}
+                    </div>
+                </div>
+                <div class="widget-content-right header-user-info ml-3">
+                    <button type="button" class="btn-shadow p-1 btn btn-primary btn-sm show-toastr-example">
+                        <i class="fa text-white fa-id-badge pr-1 pl-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>        
+</div>
+
+<!--- logout from the app and okta ---->
+<form action="/forces-logout" id="logoutform" method="post"></form>
+
+<script type="text/javascript" src="./assets/scripts/globalVars.js"></script>
+<script>
+var isuserloggedin = $("#userloggedin").text();
+console.log("isuserloggedin: "+isuserloggedin);
+if(isuserloggedin == 'true') { $(".app-header-right").show()};
+
+var config = {
+    pkce:  false,
+    issuer: oktaBaseTenant,
+    clientId: clientId,
+    redirectUri: redirectUri_implicit,
+    scopes: scopes,
+    tokenManager: {
+        storage: 'localStorage'
+    },
+    // Handle session expiration / token renew failure
+    onSessionExpired: function() {
+        console.log('re-authorization is required');
+        authClient.getWithRedirect();
+    }
+};
+
+
+var authClient = new OktaAuth(config);
+
+$("#logout").click(async function(e){
+	e.preventDefault();
+    console.log("signing out");
+    authClient.tokenManager.clear();
+    console.log("cleared tokenManager");
+    localStorage.clear();
+    console.log("cleared local storage");
+    await authClient.revokeAccessToken(); // strongly recommended
+    authClient.closeSession()
+    .then(() => {
+        console.log('successfully logged out');
+        if(isuserloggedin) { document.getElementById('logoutform').submit(); }
+        else { 
+            //window.location.reload(true);
+            window.location.href = '/'; 
+        }
+    })
+    .catch(e => {
+        if (e.xhr && e.xhr.status === 429) {
+        // Too many requests
+        console.log(e.xhr);
+        }
+    });
+});
+
+$("#userinfo").click(async function(e){
+	e.preventDefault();
+    window.location.href = "/userinfo";
+});
+
+//});
+</script>

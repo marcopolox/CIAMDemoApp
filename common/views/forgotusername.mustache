@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+{{>head}}
+
+<body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        {{>app-header}}               
+        <div class="app-main">
+                {{>side-menu}}    
+                <div class="app-main__outer">
+                    <div class="app-main__inner">
+                        <div class="app-page-title">
+                            <div class="page-title-wrapper">
+                                <div class="page-title-heading">
+                                    <div class="page-title-icon">
+                                        <i class="pe-7s-magic-wand icon-gradient bg-mean-fruit">
+                                        </i>
+                                    </div>
+                                    <div>Okta for CIAM
+                                        <div class="page-title-subheading">Customer Identity Access Management (CIAM) & B2B Identity
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>            
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="row" id="registrationrow">
+                                    <div class="col-lg-10">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Forgot Username - Retrieve by Registered Phone</h5>
+                                                <p class="pt-20 pb-20 text-danger" id="responsemsg"></p>
+                                                <form class="" id="form_forgotusername" action="#">
+                                                    <div class="position-relative row form-group"><label for="exampleMobile" class="col-sm-4 col-form-label">Mobile phone number</label>
+                                                        <div class="col-sm-10"><input name="mobile" id="exampleMobile" placeholder="" type="text" class="form-control"></div>
+                                                    </div>
+                                                    <div class="position-relative row form-check">
+                                                        <div class="col-sm-10">
+                                                            <button class="btn btn-secondary" style="float: right" id="searchbtn_forgotusername">Search</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="activationrow" style="display: none">
+                                    <div class="col-lg-10">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-body">
+                                                <form id="passcodeform" action="#">
+                                                    <h3>We sent an activation code to your phone, please enter it below</h3>
+                                                    <div class="mt-10">
+                                                        <input type="text" name="passcode" placeholder="Passcode" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Passcode'" required class="single-input">
+                                                    </div>
+                                                    <div class="mt-10"><button class="btn btn-primary" id="passcodebtn" style="float: right;">Validate</button></div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="col-lg-10">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Forgot Username - Retrieve by Personal Information</h5>
+                                                <p class="pt-20 pb-20 text-danger" id="responsemsg"></p>
+                                                <form class="" id="form_forgotusername_complex" action="#">
+                                                    <div class="position-relative row form-group"><label for="firstName" class="col-sm-4 col-form-label">First Name</label>
+                                                        <div class="col-sm-10"><input name="firstName" id="firstName" placeholder="" type="text" class="form-control"></div>
+                                                    </div>
+                                                    <div class="position-relative row form-group"><label for="lastName" class="col-sm-4 col-form-label">Last Name</label>
+                                                        <div class="col-sm-10"><input name="lastName" id="lastName" placeholder="" type="text" class="form-control"></div>
+                                                    </div>
+                                                    <div class="position-relative row form-group"><label for="city" class="col-sm-4 col-form-label">City</label>
+                                                        <div class="col-sm-10"><input name="city" id="city" placeholder="" type="text" class="form-control"></div>
+                                                    </div>
+                                                    <!--<div class="position-relative row form-group"><label for="email" class="col-sm-4 col-form-label">Email</label>
+                                                        <div class="col-sm-10"><input name="email" id="email" placeholder="" type="text" class="form-control"></div>
+                                                    </div>-->
+                                                    <div class="position-relative row form-check">
+                                                        <div class="col-sm-10">
+                                                            <button class="btn btn-secondary" style="float: right" id="searchbtn_forgotusername_personal">Search</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="searchresults" style="display: none">
+                            <div class="col-lg-10">
+                                <div class="main-card mb-3 card">
+                                    <div class="card-body">
+                                        <form id="passcodeform" action="#">
+                                            <h3>Here is your username:</h3>
+                                            <div class="mt-10">
+                                                <div id="username" style="color: #129FFC;font-size:large"></div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div id="userid" style="display:none"></div>
+<script type="text/javascript" src="./assets/scripts/main.js"></script>
+<script>
+
+$(document).ready(function(){
+    $('#activationrow').hide();
+    $('#responsemsgok').hide();
+    var apiData = {};
+    var username = "";
+
+    $("#searchbtn_forgotusername").click(async function(e){
+        e.preventDefault();
+        loading(true);
+        var userfound = false;
+        var userid = "";
+        var factorid = "";
+        
+        const primaryPhone = $('input[name="mobile"]').val();
+        console.log("STEP 0. Mobile phone number: ",primaryPhone);
+        formData = {'primaryPhone':primaryPhone};
+        let finduser = await $.ajax({
+            type: "POST",
+            url: "/finduserbyphone",
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(res){
+                loading(false);
+                console.log("call result of okta user find: ",res);
+                if(res != null && res != []){
+                    let user = res[0];
+                    userid = user.id;
+                    username = user.profile.login;
+                    console.log("username: ",username);
+                    userfound = true;
+                }
+            },
+            error: function(errMsg){
+                loading(false);
+                console.log("errorMsg: ",errMsg.responseText);
+                showUsername(errMsg.responseText);
+            }
+        });
+
+        if(userfound){
+            await $.ajax({
+            type: "POST",
+            url: "/getsmsfactorid",
+            contentType: 'application/json',
+            data: JSON.stringify({userid: userid}),
+            success: async function(rdata){
+                factorid = rdata.factorid;
+                console.log("factorid: ",factorid);
+
+                apiData.userid = userid;
+                apiData.factorid = factorid;
+                console.log("apidata: ",apiData);
+
+                await $.ajax({
+                    type: "POST",
+                    url: "/sendsmschallenge",
+                    contentType: 'application/json',
+                    data: JSON.stringify(apiData),
+                    success: function(result){
+                        console.log("sendsmschallenge response: "+ JSON.stringify(result));
+                        switchForm();
+                    },
+                    error: function(errMsg){
+                        console.log("errorMsg: "+JSON.stringify(errMsg));
+                    }
+                });
+            },
+            error: function(errMsg){
+                console.log("errorMsg: "+JSON.stringify(errMsg));
+            }
+        });
+        } else {
+            displayerr(finduser);
+        }
+    });
+
+    $("#passcodebtn").click(async function(e){
+        e.preventDefault();
+        Promise.resolve()
+        .then(
+            function() {
+                const passcode = $('input[name="passcode"]').val();
+                console.log("STEP 0. Passcode: "+JSON.stringify(passcode));
+                apiData.passcode = passcode;
+                return(apiData);
+            }
+        )
+        .then(
+            async function(apiData) {
+                console.log("STEP 4. Verify sms");
+                console.log("DATA IN: "+ JSON.stringify(apiData));
+                let done = await $.ajax({
+                    type: "POST",
+                    url: "/verifyfactor",
+                    contentType: 'application/json',
+                    data: JSON.stringify(apiData),
+                    success: function(data){
+                        console.log("Call result of SMS verify: "+data);
+                        clearForm();
+                        //showToast('Found you!','success');
+                        console.log("username: ",username);
+                        showUsername(username);
+                    },
+                    error: function(errMsg){
+                        console.log("errorMsg: ",errMsg);
+                    }
+                });
+            }
+        )
+        .catch(function(e) 
+            {
+                console.log("error: "+JSON.stringify(e.message));
+                displayerr(e.message);
+            }
+        );
+
+        
+    });
+});
+
+$("#searchbtn_forgotusername_personal").click(async function(e){
+        e.preventDefault();
+        loading(true);
+        var apiData = {};
+        var user = {};
+        var userfound = false;
+        var username = "";
+        const firstName = $('input[name="firstName"]').val();
+        const lastName = $('input[name="lastName"]').val();
+        const city = $('input[name="city"]').val();
+        //const email = $('input[name="email"]').val();
+        var formData = {'searchparams': {'firstName':firstName,'lastName':lastName,'city':city}};
+        let finduser = await $.ajax({
+            type: "POST",
+            url: "/finduserbysearch",
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(res){
+                console.log("call result of okta user find: "+res);
+                if(res != null && res != []){
+                    user = res;
+                    userid = user[0].id;
+                    username = user[0].profile.login;
+                    userfound = true;
+                    loading(false);
+                }
+            },
+            error: function(errMsg){
+                loading(false);
+                console.log("errorMsg: ",errMsg.responseText);
+                showUsername(errMsg.responseText);
+            }
+        });
+
+        if(userfound){
+            showUsername(username);
+        } else {
+            showUsername("Could not find you...try calling support :P");
+        }
+});
+
+function displayerr(msg) {
+    $('#responsemsg').text(msg);
+}
+
+function displaymsg(msg) {
+    $('#username').text(msg);
+}
+
+function switchForm() {
+    //$('#registrationform_passwordless')[0].reset() // reset the form
+    $('#registrationrow').hide();
+    $('#activationrow').show();
+}
+function clearForm() {
+    $('#passcodeform')[0].reset() // reset the form
+    $('#activationrow').hide();
+    $('#responsemsgok').show();
+}
+function showUsername(msg){
+    $('#searchresults').show();
+    $('#username').text(msg);
+}
+
+
+</script>
+</body>
+</html>

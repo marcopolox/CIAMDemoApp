@@ -1,0 +1,26 @@
+<style>
+
+.loader 
+{
+ position: fixed;
+ left: 0px;
+ top: 0px;
+ width: 100%;
+ height: 100%;
+ z-index: 9999;
+ background: url('./assets/images/loaders/151t.gif') 50% 50% no-repeat #eee;
+ opacity: .95;
+}
+</style>
+
+<div id="loading" style="display:none" class="loader"></div>
+<script>
+function loading(show){
+		console.log("loading: ",show);
+		if(show==true) {
+			$("#loading").show();
+		} else { 
+			$("#loading").fadeOut("slow");
+		}
+	}
+</script>

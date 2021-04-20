@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+{{>head}}
+
+<body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        {{>app-header}}               
+        <div class="app-main">
+                {{>side-menu}}    
+                <div class="app-main__outer">
+                    <div class="app-main__inner">
+                        <div class="app-page-title">
+                            <div class="page-title-wrapper">
+                                <div class="page-title-heading">
+                                    <div class="page-title-icon">
+                                        <i class="pe-7s-magic-wand icon-gradient bg-mean-fruit">
+                                        </i>
+                                    </div>
+                                    <div>Okta for CIAM
+                                        <div class="page-title-subheading">Customer Identity Access Management (CIAM) & B2B Identity
+                                        </div>
+                                    </div>
+                                </div>   
+                            </div>
+                        </div>  
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="main-card mb-3 card">
+                                    <div class="card-body"><h5 class="card-title">Registration Form - Classic</h5>
+                                        <p class="pt-20 pb-20 text-red" id="responsemsg"></p>
+                                        <p class="pt-20 pb-20 text-white" id="responsemsgok"></p>
+                                        <a href="/login" class="genric-btn info" id="ackbtn" style="display:none">OK</a>
+                                        <form class="" id="registrationform" action="#">
+                                            <div class="position-relative row form-group"><label for="exampleFirstName" class="col-sm-2 col-form-label">First Name</label>
+                                                <div class="col-sm-10"><input name="firstName" id="exampleFirstName" placeholder="" type="text" class="form-control"></div>
+                                            </div>
+                                            <div class="position-relative row form-group"><label for="exampleLastName" class="col-sm-2 col-form-label">Last Name</label>
+                                                <div class="col-sm-10"><input name="lastName" id="exampleLastName" placeholder="" type="text" class="form-control"></div>
+                                            </div>
+                                            <div class="position-relative row form-group"><label for="exampleEmail" class="col-sm-2 col-form-label">Email</label>
+                                                <div class="col-sm-10"><input name="email" id="exampleEmail" placeholder="" type="email" class="form-control"></div>
+                                            </div>
+                                            <div class="position-relative row form-group"><label for="examplePassword" class="col-sm-2 col-form-label">Password</label>
+                                                <div class="col-sm-10"><input name="password" id="examplePassword" placeholder="" type="password" class="form-control"></div>
+                                            </div>
+											<div class="position-relative row form-group"><label for="city" class="col-sm-2 col-form-label">City</label>
+                                                <div class="col-sm-10"><input name="city" id="city" placeholder="" type="text" class="form-control"></div>
+                                            </div>
+											<div class="position-relative row form-group"><label for="word" class="col-sm-2 col-form-label">Word</label>
+                                                <div class="col-sm-10"><input name="word" id="word" placeholder="" type="text" class="form-control"></div>
+                                            </div>
+											<fieldset class="position-relative row form-group">
+                                                
+                                                <div class="col-sm-10">
+                                                    <div class="position-relative form-check"><label class="form-check-label"><input id="checkbox1" type="checkbox" class="form-check-input" name="premera">Notify me about news and events at my email address.</label></div>
+                                                    <div class="position-relative form-check"><label class="form-check-label"><input id="checkbox2" type="checkbox" class="form-check-input" name="partners"> Receive promotional emails from our partners.</label></div>                                   
+                                                </div>
+                                            </fieldset>
+											<small class="form-text text-muted">When you create an account, you agree to NeshPDX's <a href="#">Terms of Use</a> and acknowledge you have read its <a href="#">Privacy Policy.</a></small>
+                                            <div class="position-relative row form-check">
+                                                <div class="col-sm-10 offset-sm-2">
+                                                    <button class="btn btn-secondary" id="registerbtn">Register</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+<script type="text/javascript" src="./assets/scripts/main.js"></script>
+
+<script>
+var config = {
+    pkce: false,
+    issuer: issuer,
+};
+var authClientR = new OktaAuth(config);
+
+	$(document).ready(function(){
+		$('#ackbtn').hide();
+		$('#responsemsg').hide();
+		$('#responsemsgok').hide();
+
+		var formData = {};
+		var hookok = false;
+
+		$("#registerbtn").click(async function(e){
+			e.preventDefault();
+			loading(true);
+			const word = $('input[name="word"]').val();
+			var hookresult = {};
+			if(word != null && word != ""){
+
+				hookResult = await $.ajax({
+					type: "POST",
+					url: "/reghook",
+					dataType: "json",
+					data: {"word": word},
+					success: function(data){
+						console.log("response from reghook: "+JSON.stringify(data));
+						
+					},
+					error: function(errMsg){
+						console.log("errorMsg: "+JSON.stringify(errMsg));
+						return false;
+					}
+				});
+				hookok = hookResult.statusCode == 200?true:false;
+				if(hookok == false){
+					displayerr(hookResult.body.errorSummary);
+				}
+				console.log("hookok=",hookok);
+			}
+
+			if(hookok){
+				var formData = await grabfieldsFromForm();
+				let hookdata = JSON.parse(hookResult.body);
+				const wordSynonyms = hookdata.commands[0].value.wordSynonyms[0];
+				formData.wordSynonyms = wordSynonyms;
+				console.log("STEP 2. Create active user in Okta");
+				formData.groupid = demo_group;
+				var usercreated = false;
+				console.log("formData: ",formData);
+				let done = await $.ajax({
+					type: "POST",
+					url: "/createuser",
+					contentType: 'application/json',
+					data: JSON.stringify(formData),
+					success: function(data){
+						console.log("call result of okta user create: "+data);
+						const dd = JSON.parse(data);
+						if(dd.id){
+							usercreated = true;
+						} else {
+							displayerr("Something happened when creating user: \n"+dd.errorCauses[0].errorSummary);
+							loading(false);
+						}
+						
+					},
+					error: function(errMsg){
+						console.log("errorMsg: "+JSON.stringify(errMsg));
+						loading(false);
+					}
+				});
+				if(usercreated){clearForm(); loading(false);}
+			} else { loading(false);}
+
+		});
+	});
+
+	function displayerr(msg) {
+		$('#responsemsg').text(msg);
+		$('#responsemsg').show();
+	}
+
+	function displaymsg(msg) {
+		$('#responsemsg').text(msg);
+		$('#responsemsg').show();
+		$('#responsemsgok').show();
+	}
+
+	function clearForm() {
+		$('#responsemsg').text('');
+		$('#registrationform')[0].reset() // reset the form
+		$('#registrationform').hide();
+		displaymsg("Welcome! You have successfully created your account.");
+		$('#ackbtn').show();
+	}
+
+	async function grabfieldsFromForm() {
+		let regform = $('#registrationform');
+		const firstName = $('input[name="firstName"]').val();
+		const lastName = $('input[name="lastName"]').val();
+		const email = $('input[name="email"]').val();
+		const password = $('input[name="password"]').val();
+		const city = $('input[name="city"]').val();
+		const word = $('input[name="word"]').val();
+
+		let browser_fingerprint = "";
+		await authClientR.fingerprint()
+		.then(function(fingerprint) {
+			// Do something with the fingerprint
+			browser_fingerprint = fingerprint;
+		})
+		.catch(function(err) {
+			console.log(err);
+		});
+
+		const newsletter = $("#checkbox1").is(':checked');
+		var subscriptions = [];
+		$("#checkbox2").is(':checked')==true && subscriptions.push('Checkbox2');
+
+		let data = {
+			"firstName":firstName,
+			"lastName":lastName,
+			"email":email,
+			"password":password,
+			"city":city,
+			"word": word,
+			"subscriptions":subscriptions,
+			"newsletter":newsletter,
+			"browser_fingerprint": browser_fingerprint
+		};
+
+		return data;
+	}
+</script>
+</body>
+
+</html>

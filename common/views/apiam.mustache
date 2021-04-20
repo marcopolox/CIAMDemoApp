@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+{{>head}}
+
+<body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        {{>app-header}}               
+        <div class="app-main">
+                {{>side-menu}}    
+                <div class="app-main__outer">
+                    <div class="app-main__inner">
+                        <div class="app-page-title">
+                            <div class="page-title-wrapper">
+                                <div class="page-title-heading">
+                                    <div class="page-title-icon">
+                                        <i class="pe-7s-magic-wand icon-gradient bg-mean-fruit">
+                                        </i>
+                                    </div>
+                                    <div>Okta for CIAM
+                                        <div class="page-title-subheading">Customer Identity Access Management (CIAM) & B2B Identity
+                                        </div>
+                                    </div>
+                                </div>   
+                            </div>
+                        </div>            
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card-shadow-primary border mb-3 card card-body border-primary">
+                                    <h5 class="card-title">Access token to use for API Gateway call</h5>
+                                    <textarea name="accesstoken" rows="15" cols="100%" id="accesstoken" class="form-control">{{accesstoken}}</textarea><br>
+                                    <button type="button" class="btn btn-primary" id="callaws">Call API Gateway (AWS)</button><br>
+                                    <button type="button" class="btn btn-secondary" id="callazure">Call API Gateway (Azure)</button>
+                                    <textarea readonly name="calllog" rows="15" cols="100%" id="calllog" class="form-control" style="display:none; margin-top: 5px"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="main-card mb-3 card">
+                                    <div class="mb-3 card text-white card-body bg-success">
+                                        <h5 class="text-white card-title">API AM Flow</h5>
+                                        <img class="img-fluid" src="./assets/images/apicallflow.png" data-toggle="modal" data-target=".bd-example-modal-lg"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+<script type="text/javascript" src="./assets/scripts/main.js"></script>
+
+</body>
+</html>
+
+<!-- Large modal -->
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">API AM Flow with API Gateway</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img class="img-fluid" src="./assets/images/apicallflow.png"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+$(document).ready(function(){        
+    $("#callaws").click(async function(e){
+        e.preventDefault();
+        const token = $("#accesstoken").val();
+        callapigateway('aws', token);
+    });
+
+    $("#callazure").click(async function(e){
+        e.preventDefault();
+        const token = $("#accesstoken").val();
+        callapigateway('azure', token);
+    });
+});
+
+async function callapigateway(apigateway, token){
+    loading(true);
+    let resp = await $.ajax({
+        type: "POST",
+        url: "/callapigtw",
+        contentType: 'application/json',
+        data: JSON.stringify({apigtw: apigateway,accesstoken: token}),
+        success: function(res){
+            console.log("Call result: "+res);
+            $("#calllog").text(res);
+            $("#calllog").show();
+            loading(false);
+        },
+        error: function(errMsg){
+            console.log("errorMsg: ",errMsg);
+            loading(false);
+        }
+    });
+    return resp;
+}
+
+</script>

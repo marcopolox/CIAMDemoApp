@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col-lg-6">
+        <div class="mb-3 card text-white card-body bg-info">
+            <h5 class="text-white card-title">ID Token (decoded)</h5>
+            <textarea class="form-control" id="idtokendecoded" readonly rows="25" cols="100%" style="font-size:11px">{{{idtokend}}}</textarea>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="mb-3 card text-white card-body bg-success">
+            <h5 class="text-white card-title">Access Token (decoded)</h5>
+            <textarea class="form-control" id="accesstokendecoded" readonly rows="25" cols="100%" style="font-size:11px">{{{accesstokend}}}</textarea>
+        </div>
+    </div>
+</div>
+<div class="row" style="margin: 10px 0px"><div class="col-lg-12"><button class="btn btn-secondary" id="showrawtokens">Show Raw Tokens</button></div></div>
+<div class="row" style="display: none" id="rawtokens">
+    <div class="col-lg-6">
+        <div class="mb-3 card text-white card-body bg-info">
+            <h5 class="text-white card-title">ID Token (raw)</h5>
+            <textarea class="form-control" id="idtoken" readonly rows="25" cols="100%" style="font-size:11px">{{{idtoken}}}</textarea>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="mb-3 card text-white card-body bg-success">
+            <h5 class="text-white card-title">Access Token (raw)</h5>
+            <textarea class="form-control" id="accesstoken" readonly rows="25" cols="100%" style="font-size:11px">{{{accesstoken}}}</textarea>
+        </div>
+    </div>
+</div>
+<script>
+$("#showrawtokens").click(function(e){
+    e.preventDefault();
+    if($(this).text() == "Show Raw Tokens") { 
+        $("#rawtokens").show();
+        $(this).text("Hide Raw Tokens");
+    }
+    else {
+        $("#rawtokens").hide();
+        $(this).text("Show Raw Tokens");
+    }
+})
+</script>

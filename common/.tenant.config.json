@@ -1,0 +1,34 @@
+{
+  "webServer": {
+    "port": 8899,
+    "appBaseUrl": "http://localhost:8899",
+    "tenantBaseUrl": "[YOUR OKTA TENANT_URL]",
+    "redirectUri": "http://localhost:8899/authorization-code/callback",
+    "redirectUriEncoded": "http%3A%2F%2Flocalhost%3A8899%2Fauthorization-code%2Fcallback",
+    "oidc": {
+      "clientId": "[YOUR OKTA APP CLIENT ID]",
+      "clientSecret": "[YOUR OKTA APP CLIENT SECRET]",
+      "issuer": "[YOUR API AM AS SERVER]", 
+      "scope": "openid profile email gold"
+    },
+    "authzserver": "[IF USING CUSTOM AS SPECIFY THE ID HERE]",
+    "oktaapikey": "SSWS [YOUR OKTA API KEY]",
+    "awsapikey": "[YOUR AWS API GATEWAY API KEY]",
+    "aws_oapi_key": "[YOUR AWS API GATEWAY API KEY]",
+    "azureapikey": "[YOUR AZURE API GATEWAY API KEY]",
+    "anonymouspwd": "[PICK YOUR PASSWORD - MAKE SURE IT PASSES YOUR PWD POLICY SETTINGS]",
+    "demo_group": "[YOUR DEMO GROUP ID]",
+    "demouser_firstName": "Anonymous",
+    "demouser_lastName": "User",
+    "demouser_email": "do.not.reply@someoktadomain.com",
+    "demouser_login": "DemoUser",
+    "basicAuth": "[YOUR BASE64 ENCODED CLIENTID/SECRET FOR CC FLOW]",
+    "reg_hookid": "[YOUR OKTA REGISTRATION INLINE HOOK ID]",
+    "main_profileid_for_account_linking": "[PROFILE ID OF THE PRIMARYACCOUNTHOLDER - VITO CORLEONE IF YOU FOLLOW MY INSTRUCTIONS]",
+    "apiEndpoints": {
+      "aws_introspect": "[AWS API GATEWAY ENDPOINT FOR INTROSPECTION]",
+      "azure_introspect": "[AZURE API GATEWAY ENDPOINT FOR INTROSPECTION]"
+    }
+  }
+}
+

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+{{>head}}
+<body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        {{>app-header}}               
+        <div class="app-main">
+                {{>side-menu}}    
+                <div class="app-main__outer">
+                    <div class="app-main__inner">
+                        <div class="app-page-title">
+                            <div class="page-title-wrapper">
+                                <div class="page-title-heading">
+                                    <div class="page-title-icon">
+                                        <i class="pe-7s-magic-wand icon-gradient bg-mean-fruit">
+                                        </i>
+                                    </div>
+                                    <div>Okta for CIAM
+                                        <div class="page-title-subheading">Customer Identity Access Management (CIAM) & B2B Identity
+                                        </div>
+                                    </div>
+                                </div>   
+                            </div>
+                        </div>  
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="main-card mb-3 card">
+                                    <div class="card-body"><h5 class="card-title">User Info (from /userinfo endpoint)</h5>
+                                        {{#attributes}}
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" style="width: 200px;">{{0}}</span>
+                                            </div>
+                                            <input type="text" class="form-control" readonly value="{{1}}" id="{{0}}">
+                                        </div>
+                                        <br>
+                                        {{/attributes}}
+                                        <button class="btn btn-primary" id="updateuser">Update</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+
+$(document).ready(function(){
+    history.pushState('', '', location.href.split('?')[0]);
+
+    $('#city').prop('readonly', false);
+    $("#updateuser").click(function(e){
+        e.preventDefault();
+        const city = $('#city').val();
+        const userid = $('#sub').val();
+        const data = {"userid":userid,"city":city};
+        console.log("data: ",data);
+        updateuser(data);
+    });
+
+    async function updateuser(attrtoupdate){
+        loading(true);
+        let resp = await $.ajax({
+            type: "POST",
+            url: "/updateuser",
+            contentType: 'application/json',
+            data: JSON.stringify(attrtoupdate),
+            success: function(res){
+                console.log("Call result: "+res);
+                loading(false);
+                let msg = JSON.parse(res);
+                if(msg.Message){
+                    msg.Message.startsWith("User is not authorized")?showToast(false, msg.Message):showToast(true, res);
+                }
+            },
+            error: function(errMsg){
+                console.log("errorMsg: ",errMsg);
+                loading(false);
+                showToast(false,errMsg);
+            }
+        });
+        return resp;
+    }
+
+    function showToast(good,msg) {
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+            }
+        if(good){
+            toastr.success("User profile updated", "Success");
+        } else {
+            toastr.error(msg, "Error");
+        }
+        
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+{{>head}}
+<body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        {{>app-header}}               
+        <div class="app-main">
+                {{>side-menu}}    
+                <div class="app-main__outer">
+                    <div class="app-main__inner">
+                        <div class="app-page-title">
+                            <div class="page-title-wrapper">
+                                <div class="page-title-heading">
+                                    <div class="page-title-icon">
+                                        <i class="pe-7s-magic-wand icon-gradient bg-mean-fruit">
+                                        </i>
+                                    </div>
+                                    <div>Okta for CIAM
+                                        <div class="page-title-subheading">Customer Identity Access Management (CIAM) & B2B Identity
+                                        </div>
+                                    </div>
+                                </div> 
+                                <div class="page-title-actions">
+                                    <div class="d-inline-block dropdown">
+                                        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
+                                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                                <i class="fa fa-business-time fa-w-20"></i>
+                                            </span>
+                                            Links
+                                        </button>
+                                        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+                                            <ul class="nav flex-column">
+                                                <li class="nav-item">
+                                                    <a href="https://www.okta.com/products/customer-identity/b2b-integration/" class="nav-link">
+                                                        <i class="nav-link-icon lnr-inbox"></i>
+                                                        <span>
+                                                            Inbound Federation
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="https://www.okta.com/integrate/documentation/saml/" class="nav-link">
+                                                        <i class="nav-link-icon lnr-inbox"></i>
+                                                        <span>
+                                                            SAML - Okta to Okta org 
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>  
+                            </div>
+                        </div> 
+                        <div class="row" id="tokens" style="display:none">
+                            <div class="col-lg-6">
+                                <div class="mb-3 card text-white card-body" style="background-color: rgb(51, 51, 51); border-color: rgb(51, 51, 51);">
+                                    <h5 class="text-white card-title">ID Token</h5>
+                                    <textarea class="form-control" id="idtokendecoded" readonly rows="25" cols="100%" style="font-size:11px"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3 card text-white card-body" style="background-color: rgb(51, 51, 51); border-color: rgb(51, 51, 51);">
+                                    <h5 class="text-white card-title">Access Token</h5>
+                                    <textarea class="form-control" id="accesstokendecoded" readonly rows="25" cols="100%" style="font-size:11px"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="myapps">
+							{{#myapps.apps}}
+							<div class="col-lg-6 col-xl-4">
+								<div class="card mb-3 widget-content">
+									<div class="widget-content-wrapper">
+										<div class="widget-content-left">
+											<div class="widget-heading"><a href="{{url}}" target="_blank">{{label}}</a></div>
+										</div>
+										<div class="widget-content-right">
+											<div class="widget-numbers text-success"><span><img src="{{logo}}" /></span></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							{{/myapps.apps}}
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    <!-- Large modal -->
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">SAML flow</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img class="img-fluid" src="./assets/images/saml-flow.png"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="./assets/scripts/main.js"></script>
+<script>
+
+var config = {
+    pkce: false,
+    issuer: okta2okta_config.authParams.issuer,
+    clientId: okta2okta_config.clientId,
+    redirectUri: "http://localhost:8888/okta2okta",
+    tokenManager: {
+        storage: 'localStorage'
+    }
+};
+
+var authC = new OktaAuth(config);
+
+start();
+
+async function start() {
+await authC.token.parseFromUrl()
+.then(async function(res) {
+    if(res){
+        // manage token or tokens
+        console.log("found tokens in url...add tokens to token storage");
+        authClient.tokenManager.add('id_token', res.tokens.idToken);
+        authClient.tokenManager.add('access_token', res.tokens.accessToken);
+        showHeader(res.tokens.idToken.claims.name, true);
+        displayTokens(res.tokens.idToken,res.tokens.accessToken, true);
+    } else {
+
+await authC.session.get()
+.then(async function(sess){
+     console.log("session: "+JSON.stringify(sess));
+     if(sess.status === 'ACTIVE') {
+         console.log("session exists");
+         await authC.tokenManager.get('id_token') 
+        .then(async function(token) {
+        if (token) {
+            // ID token is valid
+            //console.log(token);
+            let idtoken = JSON.parse(localStorage.getItem("okta-token-storage")).id_token;
+            let accesstoken = JSON.parse(localStorage.getItem("okta-token-storage")).access_token;
+            //console.log("idtoken: "+JSON.stringify(idtoken));
+            showHeader(idtoken.claims.name);
+            displayTokens(idtoken,accesstoken, true);
+        } else {
+            console.log("no access token, get tokens without prompt");
+            await authC.token.getWithoutPrompt({
+                responseType: ['id_token', 'token'], 
+                scopes: ['openid', 'profile']
+            })
+            .then(function(tokenOrTokens) {
+                console.log("add tokens to token storage");
+                authC.tokenManager.add('id_token', res.tokens.idToken);
+                authC.tokenManager.add('access_token', res.tokens.accessToken);
+                showHeader(res.tokens.idToken.claims.name, true);
+                displayTokens(res.tokens.idToken,res.tokens.accessToken, true);
+            })
+            .catch(function(err) {
+                // handle OAuthError
+                console.log("something happened when getting tokens: ", err);
+            });
+        }
+        });
+     }
+ })
+ .catch(function(err){
+     console.log("err: "+err);
+ });
+    }
+    })
+.catch(function(err) {
+    // handle OAuthError
+    console.log("something happened when getting tokens: "+ err);
+});
+}
+
+function showHeader(name, loggedin) {
+    //console.log("showing header...name="+name);
+    $(".app-header-right").show();
+    $("#user_name").text(name);
+    if(loggedin){
+        $("#user_title").text("Logged in");
+    } else {
+        $("#user_title").text("Not logged in");
+    }
+    
+}
+
+function displayTokens(idtoken, accesstoken, hasaccesstoken){
+    //console.log("show tokens");
+    if(hasaccesstoken) {
+        $("#accesstokendecoded").text(JSON.stringify(authC.token.decode(accesstoken.accessToken),null,4));
+    }
+    $("#idtokendecoded").text(JSON.stringify(authC.token.decode(idtoken.idToken),null,4));
+    
+    //console.log("show decoded tokens");
+    $("#tokens").show();
+
+}
+
+function showToast() {
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+        }
+    toastr.success("You've successfully authenticated. Your money has been transferred!", "Success");
+}
+
+
+/** ****************************************************** */
+  /** Get apps for a user - NOTE: modify the current app name below so it does not display in the list */
+  /** ****************************************************** */
+  getApps = async function(userid) {
+      console.log("getapps userid: "+JSON.stringify(userid));
+
+        let apps = await $.ajax({
+            method: 'GET',
+            url: okta2okta_config.baseUrl + '/api/v1/apps?filter=user.id+eq+"' + userid + '"',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-cache',
+                'Authorization': "SSWS " + okta2okta_config.apikey
+            },
+            success: function(response){
+                console.log("Apps response: "+ JSON.stringify(response));
+                var myapps = {};
+                var app = {};
+                var resbod = JSON.parse(response.body);
+                console.log('apps: ' + JSON.stringify(resbod));
+                myapps.apps = [];
+                for (i in resbod) {
+                    if(resbod[i].label.indexOf("Generated") > 0)
+                    {
+                        continue;
+                    }
+                    if (resbod[i].label === 'DemoPortal' || resbod[i]._links.appLinks.length == 0) {
+                        continue;
+                    } 
+                    app.label = resbod[i].label;
+                    app.url = resbod[i]._links.appLinks[0].href;
+                    app.logo = resbod[i]._links.logo[0].href;
+                    myapps.apps.push(app);
+                    app = {};
+                }
+            },
+            error: function(errMsg){
+                console.log("errorMsg: "+JSON.stringify(errMsg));
+            }
+        });
+  };
+</script>
+</body>
+</html>

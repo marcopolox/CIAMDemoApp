@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+{{>head}}
+
+<body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        {{>app-header}}               
+        <div class="app-main">
+                {{>side-menu}}    
+                <div class="app-main__outer">
+                    <div class="app-main__inner">
+                        <div class="app-page-title">
+                            <div class="page-title-wrapper">
+                                <div class="page-title-heading">
+                                    <div class="page-title-icon">
+                                        <i class="pe-7s-magic-wand icon-gradient bg-mean-fruit">
+                                        </i>
+                                    </div>
+                                    <div>Okta for CIAM
+                                        <div class="page-title-subheading">Customer Identity Access Management (CIAM) & B2B Identity
+                                        </div>
+                                    </div>
+                                </div>   
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="mb-3 card text-white card-body bg-success">
+                                    <h5 class="text-white card-title">Transfer Money</h5>
+                                    <p class="pt-20 pb-20 text-red" id="responsemsg"></p>
+                                    <p class="pt-20 pb-20 text-white" id="responsemsgok"></p>
+                                    <form id="moneytransferform">
+                                        <div class="position-relative row form-group"><label for="exampleFromAccount" class="col-sm-4 col-form-label">From Account</label>
+                                            <div class="col-sm-8">
+                                                <input name="fromAccount" id="exampleFromAccount" placeholder="" type="text" class="form-control">
+                                                <div class="invalid-feedback">Please provide a From Account.</div>
+                                            </div>
+                                        </div>
+                                        <div class="position-relative row form-group"><label for="exampleToAccount" class="col-sm-4 col-form-label">To Account</label>
+                                            <div class="col-sm-8">
+                                                <input name="toAccount" id="exampleToAccount" placeholder="" type="text" class="form-control">
+                                                <div class="invalid-feedback">Please provide a To Account.</div>
+                                            </div>
+                                        </div>
+                                        <div class="position-relative row form-group"><label for="exampleAmount" class="col-sm-4 col-form-label">Amount</label>
+                                            <div class="col-sm-8">
+                                                <input name="amount" id="exampleAmount" placeholder="" type="number" class="form-control" required>
+                                                <div class="invalid-feedback">Please provide a valid amount.</div>
+                                            </div>
+                                        </div>
+                                        <div class="position-relative row form-check">
+                                            <div class="col-sm-10 offset-sm-2">
+                                                <button class="btn btn-secondary" id="transferbtn">Transfer</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-lg-4" id="validationform" style="display:none">
+                                <div class="mb-3 card text-white card-body bg-primary">
+                                <h4>We sent an activation code to your phone, please enter it below</h4>
+                                <form id="passcodeform" action="#">
+                                    <div class="position-relative row form-group"><label for="passcode" class="col-sm-4 col-form-label">Passcode</label>
+                                        <div class="col-sm-8">
+                                            <input name="passcode" id="passcode" placeholder="passcode" type="number" class="form-control" required>
+                                            <div class="invalid-feedback">Please provide a valid passcode.</div>
+                                        </div>
+                                    </div>
+                                    <div class="position-relative row form-check">
+                                        <div class="col-sm-10 offset-sm-2">
+                                            <button class="btn btn-secondary" id="passcodebtn">Validate</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="row" id="tokens">
+                            <div class="col-lg-6">
+                                <div class="mb-3 card text-white card-body" style="background-color: rgb(51, 51, 51); border-color: rgb(51, 51, 51);">
+                                    <h5 class="text-white card-title">ID Token</h5>
+                                    <textarea class="form-control" id="idtokendecoded" readonly rows="25" cols="100%" style="font-size:11px">{{{idtokend}}}</textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3 card text-white card-body" style="background-color: rgb(51, 51, 51); border-color: rgb(51, 51, 51);">
+                                    <h5 class="text-white card-title">Access Token</h5>
+                                    <textarea class="form-control" id="accesstokendecoded" readonly rows="25" cols="100%" style="font-size:11px">{{{accesstokend}}}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+<div id="userid" style="display:none">{{userinfo.sub}}</div>
+<script type="text/javascript" src="./assets/scripts/main.js"></script>
+<script>
+
+$(document).ready(function(){
+    $('#responsemsg').hide();
+    $('#responsemsgok').hide();
+    var apiData = {};
+
+    $("#transferbtn").click(async function(e){
+        e.preventDefault();
+        var sessionToken = '';
+        const userid = $("#userid").text();
+        var factorid = '';
+
+        await $.ajax({
+            type: "POST",
+            url: "/getsmsfactorid",
+            contentType: 'application/json',
+            data: JSON.stringify({"userid": userid}),
+            success: async function(rdata){
+                factorid = rdata.factorid;
+                console.log("factorid: ",factorid);
+
+                apiData.userid = userid;
+                apiData.factorid = factorid; //sms factor for don@example.com
+                console.log("apidata: ",apiData);
+
+                await $.ajax({
+                    type: "POST",
+                    url: "/sendsmschallenge",
+                    contentType: 'application/json',
+                    data: JSON.stringify(apiData),
+                    success: function(result){
+                        console.log("DATA OUT: "+ JSON.stringify(result));
+                        $("#validationform").show();
+                        $("#passcode").focus();
+                    },
+                    error: function(errMsg){
+                        console.log("errorMsg: "+JSON.stringify(errMsg));
+                    }
+                });
+            },
+            error: function(errMsg){
+                console.log("error getting factors: "+JSON.stringify(errMsg));
+            }
+        });
+    });
+
+    $("#passcodebtn").click(function(e){
+        e.preventDefault();
+        Promise.resolve()
+        .then(
+            function() {
+                const passcode = $('input[name="passcode"]').val();
+                console.log("STEP 0. Passcode: "+JSON.stringify(passcode));
+                apiData.passcode = passcode;
+                return(apiData);
+            }
+        )
+        .then(
+            async function(apiData) {
+                console.log("STEP 4. Verify sms");
+                console.log("DATA IN: "+ JSON.stringify(apiData));
+                let done = await $.ajax({
+                    type: "POST",
+                    url: "/verifyfactor",
+                    contentType: 'application/json',
+                    data: JSON.stringify(apiData),
+                    success: function(data){
+                        console.log("Call result of SMS verify: "+data);
+                        clearForm();
+                        showToast();
+                        
+                    },
+                    error: function(errMsg){
+                        console.log("errorMsg: ",errMsg);
+                    }
+                });
+            }
+        )
+        .catch(function(e) 
+            {
+                console.log("error: "+JSON.stringify(e.message));
+                displayerr(e.message);
+            }
+        );
+        
+    });
+});
+
+function displayerr(form, msg) {
+    $('#responsemsg').text(msg);
+    $('#responsemsg').show();
+    
+}
+
+function displaymsg(form, msg) {
+    $('#responsemsgok').text(msg);
+    $('#responsemsgok').show();
+    
+}
+
+function clearForm() {
+        $('#moneytransferform')[0].reset() // reset the form
+        $('#moneytransferform').hide();
+        $('#passcodeform')[0].reset() // reset the form
+        $('#validationform').hide();
+}
+
+function showToast() {
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+        }
+    toastr.success("You've successfully authenticated. Your money has been transferred!", "Success");
+}
+
+</script>
+</body>
+</html>

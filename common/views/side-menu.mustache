@@ -1,0 +1,136 @@
+<div class="app-sidebar sidebar-shadow">
+    <div class="app-header__logo">
+        <div class="logo-src"></div>
+        <div class="header__pane ml-auto">
+            <div>
+                <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="app-header__mobile-menu">
+        <div>
+            <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
+                <span class="hamburger-box">
+                    <span class="hamburger-inner"></span>
+                </span>
+            </button>
+        </div>
+    </div>
+    <div class="app-header__menu">
+        <span>
+            <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
+                <span class="btn-icon-wrapper">
+                    <i class="fa fa-ellipsis-v fa-w-6"></i>
+                </span>
+            </button>
+        </span>
+    </div>    <div class="scrollbar-sidebar">
+        <div class="app-sidebar__inner">
+            <ul class="vertical-nav-menu">
+                <li class="app-sidebar__heading">Home</li>
+                <li>
+                    <a href="/" class="home">
+                        <i class="metismenu-icon pe-7s-magic-wand"></i>
+                        Main Page
+                    </a>
+                </li>
+                <li class="app-sidebar__heading">Sign-in Widget</li>
+                <li>
+                    <a href="#">
+                        <i class="metismenu-icon pe-7s-joy"></i>
+                        Sign-in Widget
+                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="login" class="login">
+                                <i class="metismenu-icon pe-7s-joy"></i>
+                                OOTB Example
+                            </a>
+                        </li>
+                        <li>
+                            <a href="signin_widget3" class="signin_widget3">
+                                <i class="metismenu-icon pe-7s-joy">
+                                </i>Custom Widget
+                            </a>
+                        </li>
+                        <li>
+                            <a href="signin_widgetR" class="signin_widgetR">
+                                <i class="metismenu-icon pe-7s-joy">
+                                </i>Registration
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="app-sidebar__heading">Use Cases</li>
+                <li>
+                    <a href="passwordless" class="passwordless">
+                        <i class="metismenu-icon pe-7s-lock"></i>
+                        Passwordless
+                    </a>
+                </li>
+                <li>
+                    <a href="profilelinking" class="profilelinking">
+                        <i class="metismenu-icon pe-7s-users"></i>
+                        Account/Profile Linking
+                    </a>
+                </li>
+                <li>
+                    <a href="progressive" class="progressive">
+                        <i class="metismenu-icon pe-7s-add-user"></i>
+                        Progressive Profiling
+                    </a>
+                </li>
+                <li>
+                    <a href="stepup" class="stepup">
+                        <i class="metismenu-icon pe-7s-upload"></i>
+                        Step-up Authentication *
+                    </a>
+                </li>
+                <li>
+                    <a href="sso" class="sso">
+                        <i class="metismenu-icon pe-7s-target"></i>
+                        Single Sign-on (SSO) *
+                    </a>
+                </li>
+                <li>
+                    <a href="apiam" class="apiam">
+                        <i class="metismenu-icon pe-7s-settings"></i>
+                        API Access Management *
+                    </a>
+                </li>
+                <li>
+                    <a href="inboundfed" class="inboundfed">
+                        <i class="metismenu-icon pe-7s-way"></i>
+                        Inbound Federation (B2B)
+                    </a>
+                </li>
+                <!-- *****************************************************************-->
+                <!-- Only for Okta employees... these are your UDP mobile demo apps -->
+                <li class="app-sidebar__heading">Mobile</li>
+                <li>
+                    <a href="ios" class="ios">
+                        <i class="metismenu-icon pe-7s-plugin"></i>
+                        iOS
+                    </a>
+                </li>
+                <li>
+                    <a href="android" class="android">
+                        <i class="metismenu-icon pe-7s-plugin"></i>
+                        Android
+                    </a>
+                </li>
+                <!-- *****************************************************************-->
+            </ul>
+        </div>
+    </div>
+</div>
+<div style="display:none" name={{{section}}} id="section"></div>
+<script>
+var sec = $('#section').attr('name');
+$('a.'+sec).addClass('mm-active');
+</script>

@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+{{>head}}
+
+<body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        {{>app-header}}               
+        <div class="app-main">
+                {{>side-menu}}    
+                <div class="app-main__outer">
+                    <div class="app-main__inner">
+                        <div class="app-page-title">
+                            <div class="page-title-wrapper">
+                                <div class="page-title-heading">
+                                    <div class="page-title-icon">
+                                        <i class="pe-7s-magic-wand icon-gradient bg-mean-fruit">
+                                        </i>
+                                    </div>
+                                    <div>Okta for CIAM
+                                        <div class="page-title-subheading">Customer Identity Access Management (CIAM) & B2B Identity
+                                        </div>
+                                    </div>
+                                </div>   
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-3 card text-white card-body bg-info">
+                                    <h5 class="text-white card-title">Step 1 - Browser Fingerprint</h5>
+                                    <textarea class="form-control" id="fingerprint" name="fingerprint" readonly rows="11" cols="100%" style="font-size:11px"></textarea>
+                                    <!--<pre class='prettyprint'><code id="fingerprint"></code></pre>-->
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-3 card text-white card-body bg-success">
+                                    <h5 class="text-white card-title">Step 2 - Register as a Prospect</h5>
+                                    <p class="pt-20 pb-20 text-red" id="responsemsg1"></p>
+                                    <p class="pt-20 pb-20 text-white" id="responsemsgok1"></p>
+                                    <form id="registrationformProspect">
+                                        <div class="position-relative row form-group"><label for="exampleFirstName" class="col-sm-4 col-form-label">First Name</label>
+                                            <div class="col-sm-8"><input name="firstName" id="exampleFirstName" placeholder="" type="text" class="form-control"></div>
+                                        </div>
+                                        <div class="position-relative row form-group"><label for="exampleLastName" class="col-sm-4 col-form-label">Last Name</label>
+                                            <div class="col-sm-8"><input name="lastName" id="exampleLastName" placeholder="" type="text" class="form-control"></div>
+                                        </div>
+                                        <div class="position-relative row form-group"><label for="exampleEmail" class="col-sm-4 col-form-label">Email</label>
+                                            <div class="col-sm-8">
+                                                <input id="email" name="email" id="exampleEmail" placeholder="" type="email" class="form-control" required>
+                                                <div class="invalid-feedback">Please provide a valid email.</div>
+                                            </div>
+                                        </div>
+                                        <div class="position-relative row form-check">
+                                            <div class="col-sm-10 offset-sm-2">
+                                                <button class="btn btn-secondary" id="registerbtnProspect">Register</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-3 card text-white card-body bg-primary">
+                                    <h5 class="text-white card-title">Step 3 - Become a Customer</h5>
+                                    <p class="pt-20 pb-20 text-red" id="responsemsg2"></p>
+                                    <p class="pt-20 pb-20 text-white" id="responsemsgok2"></p>
+                                    <form class="needs-validation" novalidate id="registrationform_customer">
+                                        <div class="position-relative row form-group"><label for="password" class="col-sm-4 col-form-label">Password</label>
+                                            <div class="col-sm-8"><input name="password" id="password" type="password" class="form-control"></div>
+                                        </div>
+                                        <div class="position-relative row form-check">
+                                            <div class="col-sm-10 offset-sm-2">
+                                                <button class="btn btn-secondary" id="updateprofilebtn">Register</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="row" id="tokens" style="display:none">
+                            <div class="col-lg-6">
+                                <div class="mb-3 card text-white card-body" style="background-color: rgb(51, 51, 51); border-color: rgb(51, 51, 51);">
+                                    <h5 class="text-white card-title">ID Token</h5>
+                                    <textarea class="form-control" id="idtokendecoded" readonly rows="25" cols="100%" style="font-size:11px">{{idtokend}}</textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3 card text-white card-body" style="background-color: rgb(51, 51, 51); border-color: rgb(51, 51, 51);">
+                                    <h5 class="text-white card-title">Access Token</h5>
+                                    <textarea class="form-control" id="accesstokendecoded" readonly rows="25" cols="100%" style="font-size:11px">{{accesstokend}}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+<script type="text/javascript" src="./assets/scripts/main.js"></script>
+<script>
+
+var config = {
+    pkce: false,
+    issuer: issuer,
+    clientId: clientId,
+    tokenManager: {
+        storage: 'localStorage'
+    }
+};
+
+var authClientP = new OktaAuth(config);
+
+$(document).ready(function(){
+    $('#ackbtn').hide();
+    $('#responsemsg').hide();
+    $('#ackbtn1').hide();
+    $('#responsemsg1').hide();
+    $('#ackbtn2').hide();
+    $('#responsemsg2').hide();
+
+    authClientP.session.exists()
+    .then(function(exists) {
+        if (exists) {
+            console.log("session exists...try to get tokens");
+            authClientP.token.getWithoutPrompt({
+                responseType: ['id_token', 'token'], 
+                scopes: ['openid', 'profile', 'prospect']
+            })
+            .then(function(res) {
+                console.log("got tokens: ",res.tokens);
+                
+                // Do something with tokens, such as
+                authClientP.tokenManager.add('idToken', res.tokens.idToken);
+                authClientP.tokenManager.add('accessToken', res.tokens.accessToken);
+                showHeader(res.tokens.idToken.claims.name, true);
+                displayTokens(res.tokens.idToken,res.tokens.accessToken, true);
+            })
+            .catch(function(err) {
+                // handle OAuthError
+                console.log("error with tokens: ",err);
+            });
+        } else {
+            console.log("no session");
+            authClientP.fingerprint()
+            .then(function(fingerprint) {
+                // Do something with the fingerprint
+                $("#fingerprint").append(fingerprint);
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+        }
+    });
+
+    var formData = {};
+
+    $("#registerbtnProspect").click(function(e){
+        e.preventDefault();
+        loading(true);
+        const email = $("#email").val();
+        
+        var sessionToken = '';
+
+        let promise = new Promise(function(resolve, reject) {
+            var formData = grabfieldsFromProspectForm(); 
+            if(formData.email.length < 1) { throw new Error('Email is mandatory'); }
+            console.log("Create anonymous user in Okta: ",formData);
+            formData.groupid = prospect_group;
+            $.ajax({
+                type: "POST",
+                url: "/createuser",
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(res){
+                    console.log("Call result of okta user create: "+res);
+                    responsejson = JSON.parse(res);
+                    const userid = responsejson.id;
+                    console.log("new userid="+userid);
+                    localStorage.setItem("userid", userid);
+                    formData.userid = userid;
+                    console.log("DATA OUT: "+ JSON.stringify(formData));
+                    resolve(formData);
+                },
+                error: function(errMsg){
+                    console.log("errorMsg: ",errMsg);
+                    loading(false);
+                }
+            });
+        });
+
+        promise.then(
+            function(result) {
+                console.log("FINAL STEP. Authenticate and authorize user in Okta");
+                    console.log("DATA IN: "+ JSON.stringify(result));
+                    $.ajax({
+                        type: "POST",
+                        url: "/authn",
+                        contentType: 'application/json',
+                        data: JSON.stringify({"username": result.email}),
+                        success: function(data){
+                            console.log("SUCCESS...call result of authn: "+data);
+                            resp = JSON.parse(data);
+                            console.log("json object "+ JSON.stringify(resp));
+                            //response = JSON.parse(resp.response); 
+                            console.log("sessionToken = ", resp.sessionToken);
+                            sessionToken = resp.sessionToken;
+                            authClientP.session.setCookieAndRedirect(sessionToken);
+                            clearForm("prospect");
+                            loading(false);
+                        },
+                        error: function(errMsg){
+                            console.log("errorMsg: ",errMsg);
+                            loading(false);
+                        }
+                    });
+                },
+            function(error){ console.log("Get session error: "+error); loading(false);}
+        );
+    });
+
+    /* ****************************/
+    /*** Customer form ***/
+    /* ****************************/
+    $("#updateprofilebtn").click(function(e){
+        e.preventDefault();
+        loading(true);
+        var formData = {};
+        Promise.resolve()
+        .then(async function() {
+            const newpassword = $('input[name="password"]').val();
+            formData.newpassword = newpassword;
+            formData.userid = localStorage.getItem("userid");
+            await $.ajax({
+                type: "POST",
+                url: "/updatepassword",
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(data){
+                    console.log("user profile updated...DATA OUT: "+ JSON.stringify(formData));
+                },
+                error: function(errMsg){
+                    console.log("errorMsg: "+JSON.stringify(errMsg));
+                }
+            });
+            return formData;
+        })
+        .then(
+            async function(formData){
+                console.log("in removefromgroup... DATAIN: "+JSON.stringify(formData));
+                formData.groupid = prospect_group;
+                await $.ajax({
+                    type: "POST",
+                    url: "/removeuserfromgroup",
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(data){
+                        console.log("user removed from Prospect group...DATA OUT: "+ JSON.stringify(formData));
+                        
+                    },
+                    error: function(errMsg){
+                        console.log("errorMsg: "+JSON.stringify(errMsg));
+                        loading(false);
+                    }
+                });
+                return formData;
+            }
+        ).then(
+            async function(formData){
+                formData.groupid = customer_group;
+                await $.ajax({
+                    type: "POST",
+                    url: "/addusertogroup",
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(data){
+                        console.log("user added to Customer group...DATA OUT: "+ JSON.stringify(formData));
+                    },
+                    error: function(errMsg){
+                        console.log("errorMsg: "+JSON.stringify(errMsg));
+                    }
+                });
+            }
+        ).then(
+            function(){
+                authClientP.token.getWithoutPrompt({
+                    responseType: ['id_token', 'token'], 
+                    scopes: ['openid', 'profile', 'customer']
+                })
+                .then(function(res) {
+                    console.log("Fetched new tokens...add tokens to token storage");
+                    authClientP.tokenManager.add('idToken', res.tokens.idToken);
+                    authClientP.tokenManager.add('accessToken', res.tokens.accessToken);
+                    $("#fingerprint").hide();
+                    $("#registrationformProspect").hide();
+                    $("#registrationformCustomer").hide();
+                    showHeader(res.tokens.idToken.claims.name, true);
+                    displayTokens(res.tokens.idToken,res.tokens.accessToken, true);
+                    $("#registrationform_customer").hide();
+                    loading(false);
+                })
+                .catch(function(err) {
+                    // handle OAuthError
+                    console.log("something happened when getting tokens: "+ err);
+                });
+            }
+        )
+        .catch(function(e) 
+            {
+                console.log("error: "+JSON.stringify(e.message));
+                displayerr("customer", e.message);
+                loading(false);
+            }
+        );
+    });
+});
+
+function showHeader(name, loggedin) {
+    $(".app-header-right").show();
+    $("#user_name").text(name);
+}
+
+function displayerr(form, msg) {
+    if(form == "prospect") { 
+        $('#responsemsg1').text(msg);
+        $('#responsemsg1').show();
+    } else {
+        $('#responsemsg').text(msg);
+        $('#responsemsg').show();
+    }
+}
+
+function displaymsg(form, msg) {
+    if(form == "prospect") { 
+        $('#responsemsgok1').text(msg);
+        $('#responsemsgok1').show();
+    } else {
+        $('#responsemsgok').text(msg);
+        $('#responsemsgok').show();
+    }
+}
+
+function clearForm(form) {
+    if(form == "prospect") { 
+        $('#responsemsg1').hide();
+        $('#registrationformProspect')[0].reset() // reset the form
+        $('#registrationformProspect').hide();
+        //displaymsg("Thank you for registering! You'll receive an email with your account details once your WestJet Rewards ID is active. Remember, to earn WestJet dollars you need to add your WestJet Rewards ID to all your bookings.");
+        displaymsg("prospect", "Welcome! You have successfully created your account. Please check your email for futher info.");
+        $('#ackbtn1').show();
+    } else {
+        $('#responsemsg').hide();
+        $('#registrationformCustomer')[0].reset() // reset the form
+        $('#registrationformCustomer').hide();
+        //displaymsg("Thank you for registering! You'll receive an email with your account details once your WestJet Rewards ID is active. Remember, to earn WestJet dollars you need to add your WestJet Rewards ID to all your bookings.");
+        displaymsg("customer", "Welcome! You have successfully created your account. Please check your email for futher info.");
+        $('#ackbtn1').show();
+    }
+}
+
+function grabfieldsFromProspectForm() {
+    const firstName = $('input[name="firstName"]').val();
+    const fingerprint = $('input[name="fingerprint"]').text();
+    const lastName = $('input[name="lastName"]').val();
+    const email = $('input[name="email"]').val();
+    let data = {
+        "firstName":firstName,
+        "lastName":lastName,
+        "email":email,
+        "browser_fingerprint":fingerprint
+    };
+    console.log("field data: "+JSON.stringify(data));
+
+    return data;
+}
+
+function displayTokens(idtoken, accesstoken, hasaccesstoken){
+    //console.log("show tokens");
+    if(hasaccesstoken) {
+        $("#accesstokendecoded").text(JSON.stringify(authClientP.token.decode(accesstoken.accessToken),null,4));
+    }
+    $("#idtokendecoded").text(JSON.stringify(authClientP.token.decode(idtoken.idToken),null,4));
+    
+    //console.log("show decoded tokens");
+    $("#tokens").show();
+
+}
+
+</script>
+</body>
+</html>

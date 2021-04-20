@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+{{>head}}
+
+<body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        {{>app-header}}               
+        <div class="app-main">
+                {{>side-menu}}    
+                <div class="app-main__outer">
+                    <div class="app-main__inner">
+                        <div class="app-page-title">
+                            <div class="page-title-wrapper">
+                                <div class="page-title-heading">
+                                    <div class="page-title-icon">
+                                        <i class="pe-7s-magic-wand icon-gradient bg-mean-fruit">
+                                        </i>
+                                    </div>
+                                    <div>Okta for CIAM
+                                        <div class="page-title-subheading">Customer Identity Access Management (CIAM) & B2B Identity
+                                        </div>
+                                    </div>
+                                </div>   
+                            </div>
+                        </div> 
+                        <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
+                            <li class="nav-item">
+                                <a role="tab" class="nav-link active" id="tab-1" data-toggle="tab" href="#tab-content-1">
+                                    <span>Simple</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a role="tab" class="nav-link" id="tab-2" data-toggle="tab" href="#tab-content-2">
+                                    <span>Social</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a role="tab" class="nav-link" id="tab-3" data-toggle="tab" href="#tab-content-3">
+                                    <span>Super</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a role="tab" class="nav-link" id="tab-0" data-toggle="tab" href="#tab-content-0">
+                                    <span>Okta Hosted</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a role="tab" class="nav-link" id="tab-CS" data-toggle="tab" href="#tab-content-m2m">
+                                    <span>Machine-to-Machine (M2M)</span>
+                                </a>
+                            </li>
+                        </ul>   
+                        <div class="tab-content">
+                            <div class="tab-pane tabs-animation fade" id="tab-content-0" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-body"><h5 class="card-title">Sign in with Okta Hosted Widget</h5>
+                                                <a class="btn btn-primary" id="signinwithokta" href="#">Sign in</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane tabs-animation fade active show" id="tab-content-1" role="tabpanel">          
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-body"><h5 class="card-title">Widget Code</h5>
+                                                <pre class="prettyprint"><code>
+                                                var oktaSignInConfig = {
+                                                    baseUrl: '[Your Okta Tenant URL]',
+                                                    logo: '[YOUR LOGO]',
+                                                    features: {
+                                                        registration:  true,
+                                                        webauthn: true,
+                                                        showPasswordToggleOnSignInPage: true,
+                                                        selfServiceUnlock: true, 
+                                                        smsRecovery: true,
+                                                        callRecovery: true, 
+                                                        multiOptionalFactorEnroll: true
+                                                    }
+                                                };
+                                                </code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-body"><h5 class="card-title">Sign-in Widget</h5>
+                                                <div id="widget-container1" style="margin-top:-90px"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane tabs-animation fade" id="tab-content-2" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-body"><h5 class="card-title">Widget Code</h5>
+                                                <pre class="prettyprint"><code>
+                                                var oktaSignInConfig = {
+                                                    baseUrl: '[Your Okta Tenant URL]',
+                                                    clientId: '[Your Client ID]',
+                                                    redirectUri: 'http://localhost:8888/authorization-code/callback',
+                                                    authParams: {
+                                                        issuer: '[Your Authorization Server URL]',
+                                                        display: 'page',
+                                                        responseType: ['id_token', 'token'],
+                                                        scopes: ['openid', 'email', 'profile']
+                                                    },
+                                                    idps: [
+                                                        {type: 'FACEBOOK', id: '[Facebook idP ID]'},
+                                                        {type: 'GOOGLE', id: '[Google idP ID]'}
+                                                    ],
+                                                    logo: '[YOUR LOGO]',
+                                                    idpDisplay: 'PRIMARY',
+                                                    features: {
+                                                        registration:  true,
+                                                        webauthn: true,
+                                                        showPasswordToggleOnSignInPage: true
+                                                    }
+                                                };
+                                                </code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-body"><h5 class="card-title">Sign-in Widget</h5>
+                                                <div id="widget-container2" style="margin-top:-90px"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane tabs-animation fade" id="tab-content-3" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-body"><h5 class="card-title">Widget Code</h5>
+                                                <pre class="prettyprint">
+                                                    <code id="code">
+                                                        var oktaSignInConfig = {
+                                                            baseUrl: '[Your Okta Tenant URL]',
+                                                            clientId: '[Your Client ID]',
+                                                            redirectUri: 'http://localhost:8888/authorization-code/callback',
+                                                            authParams: {
+                                                                issuer: '[Your Authorization Server URL]',
+                                                                display: 'page',
+                                                                responseType: ['id_token', 'token'],
+                                                                scopes: ['openid', 'email', 'profile']
+                                                            },
+                                                            idps: [
+                                                                {type: 'FACEBOOK', id: '[Facebook idP ID]'},
+                                                                {type: 'GOOGLE', id: '[Google idP ID]'}
+                                                            ],
+                                                            logo: '[YOUR LOGO]',
+                                                            customButtons: [
+                                                                {
+                                                                title: 'Create New Account - Classic',
+                                                                className: 'register-classic',
+                                                                click: 
+                                                                    function() {
+                                                                        window.location.href = '/signin_widgetR';
+                                                                    }
+                                                                },
+                                                                {
+                                                                title: 'Create New Account - Passwordless',
+                                                                className: 'register-passwordless',
+                                                                click: 
+                                                                    function() {
+                                                                        window.location.href = '/passwordless';
+                                                                    }
+                                                                }
+                                                            ],
+                                                            i18n: {
+                                                                en: {
+                                                                'primaryauth.title': 'Sign in to Demo Portal',
+                                                                'primaryauth.username.placeholder': 'User ID or Email or phone #'
+                                                                },
+                                                                fr: {
+                                                                'primaryauth.title': 'Se connecter à Demo Portal',
+                                                                'primaryauth.username.placeholder': 'Identifiant ou Email ou téléphone'
+                                                                }
+                                                            },
+                                                            helpLinks: {
+                                                                custom: [
+                                                                    {
+                                                                        text: 'Terms of Use',
+                                                                        href: '#',
+                                                                        target: '_blank'
+                                                                    },
+                                                                    {
+                                                                        text: 'Privacy Policy',
+                                                                        href: '#',
+                                                                        target: '_blank'
+                                                                    },
+                                                                    {
+                                                                        text: 'Rewards',
+                                                                        href: '#',
+                                                                        target: '_blank'
+                                                                    }
+                                                            ]
+                                                            },
+                                                            // Enable or disable widget functionality with the following options. Some of these features require additional configuration in your Okta admin settings. Detailed information can be found here: https://github.com/okta/okta-signin-widget#okta-sign-in-widget
+                                                            features: {
+                                                                registration: true,                   // Enable self-service registration flow
+                                                                rememberMe: false,                      // Setting to false will remove the checkbox to save username
+                                                                multiOptionalFactorEnroll: true,     // Allow users to enroll in multiple optional factors before finishing the authentication flow.
+                                                                selfServiceUnlock: true,             // Will enable unlock in addition to forgotten password
+                                                                smsRecovery: true,                   // Enable SMS-based account recovery
+                                                                callRecovery: true,                  // Enable voice call-based account recovery
+                                                                passwordlessAuth: true,
+                                                                webauthn: true
+                                                            },
+                                                        };
+                                                    </code>
+                                                </pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-body"><h5 class="card-title">Sign-in Widget</h5>
+                                                <div id="widget-container3" style="margin-top:-90px"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane tabs-animation fade" id="tab-content-m2m" role="tabpanel">          
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-body" style="text-align:center"><h5 class="card-title">Machine-to-Machine - Client Credentials flow</h5>
+                                                <img class="img-fluid" src="./assets/images/ccflow.png"/>
+                                                <button id="ccflow" class="btn btn-primary">Authenticate via CC flow</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" id="cc" style="display:none">
+                                        <div class="main-card mb-3 card">
+                                            <div class="row">
+                                                <div class="card-body"><h5 class="card-title">Response</h5>
+                                                    <textarea class="form-control" id="res" readonly rows="25" cols="100%" style="font-size:12px"></textarea>
+                                                </div>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+<script type="text/javascript" src="./assets/scripts/main.js"></script>
+<script>
+
+var oktaSignInConfig1 = {
+    baseUrl: oktaBaseTenant,
+    logo: logo,
+    features: {
+        registration:  true,
+        webauthn: true,
+        showPasswordToggleOnSignInPage: true,
+        selfServiceUnlock: true,             // Will enable unlock in addition to forgotten password
+        smsRecovery: true,                   // Enable SMS-based account recovery
+        callRecovery: true, 
+        multiOptionalFactorEnroll: true
+    }
+};
+
+var oktaSignInConfig2 = {
+    baseUrl: oktaBaseTenant,
+    idps: idps_social,
+    logo: logo,
+    idpDisplay: 'PRIMARY',
+    features: {
+        registration:  true,
+        webauthn: true,
+        showPasswordToggleOnSignInPage: true,
+        multiOptionalFactorEnroll: true
+    }
+};
+
+var oktaSignInConfig3 = {
+    baseUrl: oktaBaseTenant,
+    idps: idps_social,
+    logo: logo,
+    customButtons: [
+        {
+        title: 'Create New Account - Classic',
+        className: 'register-classic btn btn-focus',
+        click: 
+            function() {
+                window.location.href = '/signin_widgetR';
+            }
+        },
+        {
+        title: 'Create New Account - Passwordless',
+        className: 'register-passwordless',
+        click: 
+            function() {
+                window.location.href = '/passwordless';
+            }
+        }
+    ],
+    i18n: {
+        en: {
+        'primaryauth.title': 'Sign in to Demo Portal',
+        'primaryauth.username.placeholder': 'User ID or Email or phone #'
+        },
+        fr: {
+        'primaryauth.title': 'Se connecter à Demo Portal',
+        'primaryauth.username.placeholder': 'Identifiant ou Email ou téléphone'
+        }
+    },
+    helpLinks: {
+        custom: [
+            {
+                text: 'Forgot username?',
+                href: '/forgotusername',
+            },
+            {
+                text: 'Terms of Use',
+                href: '#',
+                target: '_blank'
+            },
+            {
+                text: 'Privacy Policy',
+                href: '#',
+                target: '_blank'
+            },
+            {
+                text: 'Rewards',
+                href: '#',
+                target: '_blank'
+            }
+    ]
+    },
+    // Enable or disable widget functionality with the following options. Some of these features require additional configuration in your Okta admin settings. Detailed information can be found here: https://github.com/okta/okta-signin-widget#okta-sign-in-widget
+    features: {
+        registration: true,                   // Enable self-service registration flow
+        rememberMe: false,                      // Setting to false will remove the checkbox to save username
+        multiOptionalFactorEnroll: true,     // Allow users to enroll in multiple optional factors before finishing the authentication flow.
+        selfServiceUnlock: true,             // Will enable unlock in addition to forgotten password
+        smsRecovery: true,                   // Enable SMS-based account recovery
+        callRecovery: true,                  // Enable voice call-based account recovery
+        passwordlessAuth: true,
+        webauthn: true
+    },
+};
+
+var signIn1 = new OktaSignIn(oktaSignInConfig1);
+var signIn2 = new OktaSignIn(oktaSignInConfig2);
+var signIn3 = new OktaSignIn(oktaSignInConfig3);
+
+$(document).ready(function(){  
+
+    //invoke click of tab 0 to render the widget
+    setTimeout(function() {
+        $("#tab-0").trigger("click");
+    },10);
+
+    $("#signinwithokta").attr("href",signin_with_okta);
+
+    signIn1.renderEl({ el: '#widget-container1' }, 
+    res => {
+        if (res.status === 'SUCCESS') {
+            showToast(res.session.token);
+            submitForm(res.session.token);
+        } else { return; }
+    }, 
+    (err) => {
+        console.error(err);
+    });
+
+    $("#signinwithokta").click(function(e){
+        e.preventDefault();
+        authClient.token.getWithRedirect({
+            responseType: ['token', 'id_token'],
+            state: '{{csrfToken}}'
+        });
+    });
+
+    $("#tab-1").click(function(e){
+        signIn2.remove();
+        signIn3.remove();
+        
+        signIn1.renderEl({ el: '#widget-container1' }, 
+        res => {
+            if (res.status === 'SUCCESS') {
+                showToast(res.session.token);
+                submitForm(res.session.token);
+            } else { return; }
+        }, 
+        (err) => {
+            console.error(err);
+        });
+    });
+
+    $("#tab-2").click(function(e){
+        signIn1.remove();
+        signIn3.remove();
+        signIn2.renderEl({ el: '#widget-container2' }, 
+        res => {
+            showToast(res.session.token);
+            submitForm(res.session.token);
+        }, 
+        (err) => {
+            console.error(err);
+        });
+    });
+
+    $("#tab-3").click(function(e){
+        signIn1.remove();
+        signIn2.remove();
+        signIn3.renderEl({ el: '#widget-container3' }, 
+        res => {
+            showToast(res.session.token);
+            submitForm(res.session.token);
+        }, 
+        (err) => {
+            console.error(err);
+        });
+    });
+
+    $("#ccflow").click(async function(e){
+        e.preventDefault();
+        loading(true);
+        
+        let res = await $.ajax({
+            type: "POST",
+            url: "/ccflow",
+            contentType: 'application/json',
+            success: function(data){
+                console.log(data)
+                $("#res").text(data);
+                $("#cc").show();
+                loading(false);
+            },
+            error: function(errMsg){
+                console.log("errorMsg: ",errMsg);
+                loading(false);
+            }
+        });
+    });
+});
+
+
+function submitForm(sessionToken) {
+    var form = $('<form>', {
+        method: 'POST',
+        action: '/login'
+        });
+    $(document.body).append(form);
+    var sessionTokenField = $('<input type="hidden" name="sessionToken"/>');
+    var csrfTokenField = $('<input type="hidden" name="_csrf" value="{{{csrfToken}}}"/>');
+    sessionTokenField.val(sessionToken)
+    form.append(sessionTokenField);
+    form.append(csrfTokenField);
+    form.submit();
+}
+
+function showToast(sessionid) {
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+        }
+    
+    toastr.success("You've successfully authenticated. Session has been created: \n"+sessionid, "Success");
+}
+
+window.addEventListener('load', function(){
+    $("a.register-classic").addClass('mb-2 mr-2 btn btn-secondary');
+    $("a.register-passwordless").addClass('mb-2 mr-2 btn btn-dark');
+});
+
+</script>
+</body>
+</html>

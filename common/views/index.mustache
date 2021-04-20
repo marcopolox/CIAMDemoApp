@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+{{>head}}
+<body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        {{>app-header}}               
+        <div class="app-main">
+                {{>side-menu}}    
+                <div class="app-main__outer">
+                    <div class="app-main__inner">
+                        <div class="app-page-title">
+                            <div class="page-title-wrapper">
+                                <div class="page-title-heading">
+                                    <div class="page-title-icon">
+                                        <i class="pe-7s-magic-wand icon-gradient bg-mean-fruit">
+                                        </i>
+                                    </div>
+                                    <div>Okta for CIAM
+                                        <div class="page-title-subheading">Customer Identity Access Management (CIAM) & B2B Identity
+                                        </div>
+                                    </div>
+                                </div>   
+                            </div>
+                        </div>  
+                        
+                       
+                        {{#isLoggedIn}}
+                            {{>backendtokens}}   
+                            
+                        {{/isLoggedIn}}
+                        
+                        {{^isLoggedIn}}      
+                        <div class="row" id="genericpage">
+                            <div id='bg'></div>
+                                <section class="service-area section-gap" id="feature">
+                                        <div class="container">
+                                            <div class="row d-flex justify-content-center">
+                                                <div class="menu-content pb-60 col-lg-10">
+                                                    <div class="title text-center">
+                                                        <h1 class="mb-10">NEVER BUILD AUTH AGAIN</h1>
+                                                        <p>Okta adds authentication, authorization, and user management to your web or mobile app within minutes.</p>
+                                                    </div>
+                                                </div>
+                                            </div>					
+                                            <div class="row">
+                                                <div class="col-lg-6 secvice-left">
+                                                    <div class="single-service d-flex flex-row pb-30">
+                                                        <div class="icon">
+                                                            <h1>01</h1>
+                                                        </div>
+                                                        <div class="desc">
+                                                            <h4>Authentication</h4>
+                                                            <p>
+                                                                Quickly add secure user authentication to your app with passwords or tokens.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="single-service d-flex flex-row pb-30">
+                                                        <div class="icon">
+                                                            <h1>02</h1>
+                                                        </div>
+                                                        <div class="desc">
+                                                            <h4>Authorization</h4>
+                                                            <p>
+                                                                Use fine-grained permissions and intelligently control user access based on factors like geo, IP, device, and historical patterns in behavior.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="single-service d-flex flex-row pb-30">
+                                                        <div class="icon">
+                                                            <h1>03</h1>
+                                                        </div>
+                                                        <div class="desc">
+                                                            <h4>Token Authentication</h4>
+                                                            <p>
+                                                                Generate, manage, validate, and revoke OAuth 2.0 tokens, without custom code.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="single-service d-flex flex-row pb-30">
+                                                        <div class="icon">
+                                                            <h1>04</h1>
+                                                        </div>
+                                                        <div class="desc">
+                                                            <h4>Inbound Federation (B2B)</h4>
+                                                            <p>
+                                                                Okta sits between your application and the external provider. Your application only needs to talk to Okta, and Okta does the rest.
+                                                            </p>
+                                                        </div>
+                                                    </div>														
+                                                </div>
+                                                <div class="col-lg-6 secvice-right">
+                                                    <div class="single-service d-flex flex-row pb-30">
+                                                        <div class="icon">
+                                                            <h1>05</h1>
+                                                        </div>
+                                                        <div class="desc">
+                                                            <h4>Single Sign-On (SSO)</h4>
+                                                            <p>
+                                                                Create a better user experience with SAML or OIDC-based single sign-on using Okta and third party providers.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="single-service d-flex flex-row pb-30">
+                                                        <div class="icon">
+                                                            <h1>06</h1>
+                                                        </div>
+                                                        <div class="desc">
+                                                            <h4>Social Authentication</h4>
+                                                            <p>
+                                                                Okta supports 3rd party iDPs for building authentication into your application.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="single-service d-flex flex-row pb-30">
+                                                        <div class="icon">
+                                                            <h1>07</h1>
+                                                        </div>
+                                                        <div class="desc">
+                                                            <h4>Adaptive Multi-Factor Authentication</h4>
+                                                            <p>
+                                                                Enhance security with a second (or third) factor, like SMS, Yubikey, WebAuthN, OTP, or Okta Verify with Push.
+                                                            </p>
+                                                        </div>
+                                                    </div>	
+                                                    <div class="single-service d-flex flex-row pb-30">
+                                                        <div class="icon">
+                                                            <h1>08</h1>
+                                                        </div>
+                                                        <div class="desc">
+                                                            <h4>ThreatInsight</h4>
+                                                            <p>
+                                                                Aggregates data across the Okta customer base and uses this data to detect malicious IP addresses that attempt credential-based attacks.
+                                                            </p>
+                                                        </div>
+                                                    </div>													
+                                                </div>						
+                                            </div>
+                                        </div>	
+                                    </section>
+                        </div>
+                        {{/isLoggedIn}}
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div id="isLoggedIn" style="display:none" value="{{isLoggedIn}}"></div>
+<script type="text/javascript" src="./assets/scripts/main.js"></script>
+</body>
+</html>

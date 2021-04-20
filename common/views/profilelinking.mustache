@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en">
+{{>head}}
+
+<body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        {{>app-header}}               
+        <div class="app-main">
+                {{>side-menu}}    
+                <div class="app-main__outer">
+                    <div class="app-main__inner">
+                        <div class="app-page-title">
+                            <div class="page-title-wrapper">
+                                <div class="page-title-heading">
+                                    <div class="page-title-icon">
+                                        <i class="pe-7s-magic-wand icon-gradient bg-mean-fruit">
+                                        </i>
+                                    </div>
+                                    <div>Okta for CIAM
+                                        <div class="page-title-subheading">Customer Identity Access Management (CIAM) & B2B Identity
+                                        </div>
+                                    </div>
+                                </div> 
+                                <div class="page-title-actions">
+                                    <div class="d-inline-block dropdown">
+                                        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
+                                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                                <i class="fa fa-business-time fa-w-20"></i>
+                                            </span>
+                                            Demo
+                                        </button>
+                                        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+                                            <ul class="nav flex-column">
+                                                <li class="nav-item">
+                                                    <a href="#" class="nav-link" id="resetdemo">
+                                                        <i class="nav-link-icon lnr-inbox"></i>
+                                                        <span>
+                                                            Reset Demo
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>   
+                            </div>
+                        </div>  
+                        <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
+                            <li class="nav-item">
+                                <a role="tab" class="nav-link active" id="tab-0" data-toggle="tab" href="#tab-content-0">
+                                    <span>ACCOUNT MERGING</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a role="tab" class="nav-link" id="tab-1" data-toggle="tab" href="#tab-content-1">
+                                    <span>ACCOUNT LINKING</span>
+                                </a>
+                            </li>
+                        </ul>    
+                        <div class="tab-content">
+                            <div class="tab-pane tabs-animation fade show active" id="tab-content-0" role="tabpanel">       
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-body"><h5 class="card-title">User Info</h5>
+                                                <div>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text">First name</span></div>
+                                                        <input type="text" id="firstNameA" class="form-control" readonly value="{{userinfoA.firstName}}">
+                                                    </div>
+                                                    <br>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text">Last name</span></div>
+                                                        <input type="text" id="lastNameA" class="form-control" readonly value="{{userinfoA.lastName}}">
+                                                    </div>
+                                                    <br>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text">Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+                                                        <input type="text" id="emailA" class="form-control" readonly value="{{userinfoA.email}}">
+                                                    </div>
+                                                    <br>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text">Mobile&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+                                                        <input type="text" id="mobilePhoneA" class="form-control" readonly value="{{userinfoA.mobilePhone}}">
+                                                    </div>
+                                                    <br>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text"><input aria-label="Keeper" type="checkbox" class="" name="keeperA" id="keeperA"></span></div>
+                                                        <input placeholder="Keep this profile" type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-body"><h5 class="card-title">User Info</h5>
+                                                <div>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text">First name</span></div>
+                                                        <input type="text" id="firstNameB" class="form-control" readonly value="{{userinfoB.firstName}}">
+                                                    </div>
+                                                    <br>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text">Last name</span></div>
+                                                        <input type="text" id="lastNameB" class="form-control" readonly value="{{userinfoB.lastName}}">
+                                                    </div>
+                                                    <br>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text">Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+                                                        <input type="text" id="emailB" class="form-control" readonly value="{{userinfoB.email}}">
+                                                    </div>
+                                                    <br>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text">Mobile&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+                                                        <input type="text" id="mobilePhoneB" class="form-control" readonly value="{{userinfoB.mobilePhone}}">
+                                                    </div>
+                                                    <br>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text"><input aria-label="Keeper" type="checkbox" class="" name="keeperB" id="keeperB"></span></div>
+                                                        <input placeholder="Keep this profile" type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="mergebtnrow">
+                                    <div class="col-lg-12">
+                                        <div class="main-card mb-3 card">
+                                            <button class="btn btn-primary" id="mergebtn">Merge Profiles</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="verifyrow">
+                                    <div class="col-lg-6" id="verifyemaildiv" style="display: none">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-body"><h5 class="card-title">Verify Email</h5>
+                                                <p class="pt-20 pb-20 text-green" id="responsemsg"></p>
+                                                <p class="pt-20 pb-20 text-red" id="responsemsgerr"></p>
+                                                <form id="passcodeformE" action="#">
+                                                    <h3>We sent an activation code to your email, please enter it below</h3>
+                                                    <div class="mt-10">
+                                                        <input type="text" name="passcodeE" placeholder="Passcode" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Passcode'" required class="single-input">
+                                                    </div>
+                                                    <div class="mt-10"><button class="btn btn-primary" id="validatebtnE" style="float: right;">Validate</button></div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" id="verifyphonediv" style="display: none">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-body"><h5 class="card-title">Verify Phone</h5>
+                                            <p class="pt-20 pb-20 text-red" id="responsemsgerr2"></p>
+                                                <p class="pt-20 pb-20 text-green" id="responsemsg2"></p>
+                                                <form id="passcodeformP" action="#">
+                                                    <h3>We sent an activation code to your phone, please enter it below</h3>
+                                                    <div class="mt-10">
+                                                        <input type="text" name="passcodeP" placeholder="Passcode" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Passcode'" required class="single-input">
+                                                    </div>
+                                                    <div class="mt-10"><button class="btn btn-primary" id="validatebtnP" style="float: right;">Validate</button></div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="completemergebtnrow" style="display: none">
+                                    <div class="col-lg-12">
+                                        <div class="main-card mb-3 card">
+                                            <button class="btn btn-success" id="completemergebtn">Complete Merge</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="mergedprofilerow" style="display: none">
+                                    <div class="col-lg-12">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-body"><h5 class="card-title">Merged User Info</h5>
+                                                <div>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text">First name</span></div>
+                                                        <input type="text" id="firstName" class="form-control" readonly value="">
+                                                    </div>
+                                                    <br>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text">Last name</span></div>
+                                                        <input type="text" id="lastName" class="form-control" readonly value="">
+                                                    </div>
+                                                    <br>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text">Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+                                                        <input type="text" id="email" class="form-control" readonly value="">
+                                                    </div>
+                                                    <br>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text">Mobile&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+                                                        <input type="text" id="mobilePhone" class="form-control" readonly value="">
+                                                    </div>
+                                                    <br>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text">Old Profile Id</span></div>
+                                                        <input type="text" id="oldProfileId" class="form-control" readonly value="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane tabs-animation fade" id="tab-content-1" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="main-card mb-3 card">
+                                            <div class="card-header">Linked Users
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="text-center">Relationship</th>
+                                                        <th>Name</th>
+                                                        <th class="text-center">City</th>
+                                                        <th class="text-center">Status</th>
+                                                        <th class="text-center">Actions</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td class="text-center text-muted">PrimaryUser</td>
+                                                        <td>
+                                                            <div class="widget-content p-0">
+                                                                <div class="widget-content-wrapper">
+                                                                    <div class="widget-content-left mr-3">
+                                                                        <div class="widget-content-left">
+                                                                            <img width="40" class="rounded-circle" src="assets/images/avatars/don.jpg" alt="">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="widget-content-left flex2">
+                                                                        <div class="widget-heading">Vito</div>
+                                                                        <div class="widget-subheading opacity-7">Corleone</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-center">Staten Island</td>
+                                                        <td class="text-center">
+                                                            <div class="badge badge-info">Active</div>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <button type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm">Terminate</button>
+                                                        </td>
+                                                    </tr>
+                                                    {{#linkprofiles}}
+                                                    <tr>
+                                                        <td class="text-center text-muted">AssociatedUser</td>
+                                                        <td>
+                                                            <div class="widget-content p-0">
+                                                                <div class="widget-content-wrapper">
+                                                                    <div class="widget-content-left mr-3">
+                                                                        <div class="widget-content-left">
+                                                                            <img width="40" class="rounded-circle" src="assets/images/avatars/{{1.firstName}}.jpg" alt="">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="widget-content-left flex2">
+                                                                        <div class="widget-heading">{{1.firstName}}</div>
+                                                                        <div class="widget-subheading opacity-7">{{1.lastName}}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-center">{{1.city}}</td>
+                                                        <td class="text-center">
+                                                            <div class="badge badge-{{1.badge}}">{{1.status}}</div>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <button type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm">Terminate</button>
+                                                        </td>
+                                                    </tr>
+                                                    {{/linkprofiles}}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+<script type="text/javascript" src="./assets/scripts/main.js"></script>
+<script>
+loading(true);
+$(document).ready(function(){
+    loading(false);
+    var smsData = {};
+    var emailData = {}; 
+
+    $("#resetdemo").click(function(e){
+        e.preventDefault();
+        Promise.resolve()
+        .then(async function() {
+            // step 1: update the chosen profile
+            let updateusr = await $.ajax({
+                type: "POST",
+                url: "/updateuserlocal",
+                contentType: 'application/json',
+                data: JSON.stringify({'userid': profileA, 'mobilePhone': '', 'oldProfileId': ''}),
+                success: function(data){
+                    console.log("Call result of user update: "+data);
+                },
+                error: function(errMsg){
+                    console.log("errorMsg: "+JSON.stringify(errMsg));
+                }
+            });
+        })
+        .then(async function() {
+            // step 2: deactivate the other profile
+            let activeteuser = await $.ajax({
+                type: "POST",
+                url: "/activateuser",
+                contentType: 'application/json',
+                data: JSON.stringify({'userid':profileB}),
+                success: function(data){
+                    console.log("Call result of user activate: "+data);
+                },
+                error: function(errMsg){
+                    console.log("errorMsg: ",errMsg);
+                }
+            });
+        })
+        .catch(function(e) 
+            {
+                console.log("error: "+JSON.stringify(e.message));
+            }
+        )
+        .finally(function() {
+            window.location.reload();
+        });
+    });
+
+    $("#mergebtn").click(function(e){
+        let promiseP = new Promise(function(resolve, reject) {
+            smsData.userid = profileB;
+            smsData.factorid = profileB_factorId;
+            $.ajax({
+                type: "POST",
+                url: "/sendsmschallenge",
+                contentType: 'application/json',
+                data: JSON.stringify(smsData),
+                success: function(data){
+                    console.log("DATA OUT: "+ JSON.stringify(smsData));
+                    resolve(smsData);
+                },
+                error: function(errMsg){
+                    console.log("errorMsg: ",errMsg);
+                }
+            });
+        });
+
+        promiseP.then(
+            function(result) {
+                    console.log("DATA IN: "+ JSON.stringify(result));
+                    $("#verifyemaildiv").show();
+                    $("#verifyemaildiv").focus();
+                }
+        );
+
+        let promiseE = new Promise(function(resolve, reject) {
+            emailData.userid = profileA;
+            emailData.factorid = profileA_factorId;
+            $.ajax({
+                type: "POST",
+                url: "/sendsmschallenge",
+                contentType: 'application/json',
+                data: JSON.stringify(emailData),
+                success: function(data){
+                    console.log("DATA OUT: "+ JSON.stringify(emailData));
+                    resolve(emailData);
+                },
+                error: function(errMsg){
+                    console.log("errorMsg: ", errMsg);
+                }
+            });
+        });
+
+        promiseE.then(
+            function(result) {
+                    console.log("DATA IN: "+ JSON.stringify(result));
+                    $("#verifyphonediv").show();
+                }
+        );
+    });
+
+    $("#validatebtnP").click(function(e){
+        e.preventDefault();
+        var sData = {};
+        const passcodeP = $('input[name="passcodeP"]').val();
+        console.log("STEP 0. Passcode sms: "+JSON.stringify(passcodeP));
+        sData.passcode = passcodeP;
+        sData.userid = profileB;
+        sData.factorid = profileB_factorId;
+        console.log("DATA: "+ JSON.stringify(sData));
+        $.ajax({
+            type: "POST",
+            url: "/verifyfactor",
+            contentType: 'application/json',
+            data: JSON.stringify(sData),
+            success: function(data){
+                console.log("Call result of SMS verify: "+data);
+                displaymsg2("Validated!");
+                $('#passcodeformP')[0].reset() // reset the form
+                $('#passcodeformP').hide();
+                !$('#passcodeformE').is(':visible') ? $('#completemergebtnrow').show() : true;
+            },
+            error: function(errMsg){
+                console.log("errorMsg: ", errMsg);
+            }
+        });
+       
+    });
+
+    $("#validatebtnE").click(function(e){
+        e.preventDefault();
+        var eData = {};
+        
+        const passcodeE = $('input[name="passcodeE"]').val();
+        console.log("STEP 0. Passcode email: "+JSON.stringify(passcodeE));
+        eData.passcode = passcodeE;
+        eData.userid = profileA;
+        eData.factorid = profileA_factorId;
+        console.log("DATA: "+ JSON.stringify(eData));
+        $.ajax({
+            type: "POST",
+            url: "/verifyfactor",
+            contentType: 'application/json',
+            data: JSON.stringify(eData),
+            success: function(data){
+                console.log("Call result of email verify: "+data);
+                displaymsg("Validated!");
+                $('#passcodeformE')[0].reset() // reset the form
+                $('#passcodeformE').hide();
+                !$('#passcodeformP').is(':visible') ? $('#completemergebtnrow').show() : true;
+            },
+            error: function(errMsg){
+                console.log("errorMsg: ", errMsg);
+            }
+        });
+       
+    });
+
+    $("#completemergebtn").click(function(e){
+        const deactivateprofile = $("#keeperA").is(":checked") ? profileB : profileA;
+
+        Promise.resolve()
+        .then(function() {
+            // step 0: get merged info
+            console.log("keeperA="+$("#keeperA").is(":checked")+" keeperB="+$("#keeperB").is(":checked"));
+            const firstName_keep = $("#keeperA").is(":checked") ? ($("#firstNameA").val() != "" ? $("#firstNameA").val() : $("#firstNameB").val()) : $("#firstNameB").val();
+            const lastName_keep = $("#keeperA").is(":checked") ? ($("#lastNameA").val() != "" ? $("#lastNameA").val() : $("#lastNameB").val()) : $("#lastNameB").val();
+            const email_keep = $("#keeperA").is(":checked") ? ($("#emailA").val() != "" ? $("#emailA").val() : $("#emailB").val()) : $("#emailB").val();
+            const mobilePhone_keep = $("#keeperA").is(":checked") ? ($("#mobilePhoneA").val() != "" ? $("#mobilePhoneA").val() : $("#mobilePhoneB").val()) : $("#mobilePhoneB").val();
+            var mergedprofile = {};
+            mergedprofile.firstName = firstName_keep;
+            mergedprofile.lastName = lastName_keep;
+            mergedprofile.email = email_keep;
+            mergedprofile.mobilePhone = mobilePhone_keep;
+            mergedprofile.oldProfileId = [$("#keeperA").is(":checked") ? profileA : profileB];
+
+            var chosenUserId = $("#keeperA").is(":checked") ? profileA : profileB;
+            mergedprofile.userid = chosenUserId;
+            console.log("merged profile values: "+JSON.stringify(mergedprofile));
+            return mergedprofile;
+        })
+        .then(async function(mergedprofile) {
+            // step 1: update the chosen profile
+            let updateusr = await $.ajax({
+                type: "POST",
+                url: "/mergeProfile",
+                contentType: 'application/json',
+                data: JSON.stringify(mergedprofile),
+                success: function(data){
+                    console.log("Call result of user update: "+data);
+                },
+                error: function(errMsg){
+                    console.log("errorMsg: ", errMsg);
+                }
+            });
+            return mergedprofile;
+        })
+        .then(async function(mergedprofile) {
+            // step 2: deactivate the other profile
+            let deactiveteusr = await $.ajax({
+                type: "POST",
+                url: "/deactivateuser",
+                contentType: 'application/json',
+                data: JSON.stringify({'userid':deactivateprofile}),
+                success: function(data){
+                    console.log("Call result of user deactivate: "+data);
+                },
+                error: function(errMsg){
+                    console.log("errorMsg: ",errMsg);
+                }
+            });
+            return mergedprofile;
+        })
+        .then(function(mergedprofile) {
+            // step 3: display merged profile info 
+            showMergedprofile(mergedprofile);   
+            showToast();
+        })
+        .catch(function(e) 
+            {
+                console.log("error: "+JSON.stringify(e.message));
+            }
+        );
+    });
+});
+
+function showMergedprofile(mergedprofile) {
+    //var profile = JSON.parse(mergedprofile);
+    $('#firstName').val(mergedprofile.firstName);
+    $('#lastName').val(mergedprofile.lastName);
+    $('#email').val(mergedprofile.email);
+    $('#mobilePhone').val(mergedprofile.mobilePhone);
+    $('#oldProfileId').val(mergedprofile.oldProfileId);
+    $('#mergedprofilerow').show();
+}
+
+function displayerr(msg) {
+    $('#responsemsgerr').text(msg);
+    $('#responsemsgerr').show();
+}
+
+function displayerr2(msg) {
+    $('#responsemsgerr2').text(msg);
+    $('#responsemsgerr2').show();
+}
+
+function displaymsg(msg) {
+    $('#responsemsg').text(msg);
+    $('#responsemsg').show();
+}
+
+function displaymsg2(msg) {
+    $('#responsemsg2').text(msg);
+    $('#responsemsg2').show();
+}
+
+function showToast() {
+    $('#mergebtnrow').hide();
+    $('#verifyrow').hide();
+    $('#completemergebtnrow').hide();
+
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+        }
+    toastr.success("Your profiles have been merged!", "Success");
+}
+
+</script>
+</body>
+</html>
