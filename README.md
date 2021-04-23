@@ -1,10 +1,10 @@
+
 # Welcome to Okta for CIAM demo app
 
 > Web application running on NodeJS that showcases (a subset of) Okta's capabilities in the world of CIAM (Customer Identity and Access Management)
 > 
 
-
-https://user-images.githubusercontent.com/4019770/115899654-da602500-a413-11eb-8700-ac809e94f753.mp4
+https://user-images.githubusercontent.com/4019770/115900194-87d33880-a414-11eb-8635-f8a56179b44a.mp4
 
 
 
