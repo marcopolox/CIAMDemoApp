@@ -3,7 +3,8 @@
 > Web application running on NodeJS that showcases (a subset of) Okta's capabilities in the world of CIAM (Customer Identity and Access Management)
 > 
 
-https://user-images.githubusercontent.com/4019770/115896726-94559200-a410-11eb-82fe-f5a77f16a648.mov
+
+https://user-images.githubusercontent.com/4019770/115899654-da602500-a413-11eb-8700-ac809e94f753.mp4
 
 
 
